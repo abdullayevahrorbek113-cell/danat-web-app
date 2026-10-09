@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danat App Mini Web</title>
+    <title>Danat App Web</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -11,21 +11,24 @@
             --card-bg: #ffffff;
             --text-color: #222222;
             --accent-color: #2481cc;
+            --border-color: #e0e0e0;
         }
 
         body.dark {
-            --bg-color: #18222d;
-            --card-bg: #212d3b;
+            --bg-color: #151e27;
+            --card-bg: #1f2c3a;
             --text-color: #ffffff;
             --accent-color: #5288c1;
+            --border-color: #2b394a;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 15px;
+            padding-bottom: 70px;
             transition: all 0.3s ease;
         }
 
@@ -33,28 +36,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .header h2 {
-            margin: 0;
-            font-size: 20px;
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        select, button, input {
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
+        .controls select, .controls button {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
             background: var(--card-bg);
             color: var(--text-color);
-            font-size: 14px;
-            box-sizing: border-box;
         }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
         .game-grid {
             display: grid;
@@ -67,39 +61,25 @@
             border-radius: 12px;
             padding: 15px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s;
+            border: 1px solid var(--border-color);
         }
 
-        .game-card:active {
-            transform: scale(0.98);
+        .item-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
         }
 
-        .form-container {
-            display: none;
-            background-color: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .form-group select, .form-group input {
-            width: 100%;
-        }
+        .item-card:hover { border-color: var(--accent-color); }
 
         .btn-main {
             width: 100%;
@@ -107,20 +87,67 @@
             color: white;
             border: none;
             padding: 12px;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 8px;
             font-weight: bold;
-            cursor: pointer;
+            font-size: 15px;
             margin-top: 10px;
+            cursor: pointer;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        /* Pastki doimiy menyu (Navbar) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-item {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-color);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .nick-box {
+            background: rgba(36, 129, 204, 0.1);
+            color: var(--accent-color);
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 13px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>🎮 Danat App</h2>
+        <h3 id="appTitle">🎮 Danat App</h3>
         <div class="controls">
-            <select id="langSelect" onchange="changeLanguage()">
+            <select id="langSelect" onchange="changeLang(this.value)">
                 <option value="uz">UZB</option>
                 <option value="en">ENG</option>
                 <option value="ru">RUS</option>
@@ -129,9 +156,151 @@
         </div>
     </div>
 
-    <div class="game-grid" id="gameGrid">
-        <div class="game-card" onclick="selectGame('PUBG Mobile')">🎯 PUBG Mobile</div>
-        <div class="game-card" onclick="selectGame('Free Fire')">🔥 Free Fire</div>
-        <div class="game-card" onclick="selectGame('Standoff 2')">⚡ Standoff 2</div>
-        <div class="game-card" onclick="selectGame('Mobile Legends')">🛡 Mobile Legends</div>
-        <div class="game-card" onclick="selectGame('Telegram Xizmat
+    <!-- 1. BOSH SAHIFA TAB -->
+    <div id="tab-home" class="tab-content active">
+        <div id="gameList" class="game-grid">
+            <div class="game-card" onclick="openGame('PUBG Mobile')">🎯 PUBG Mobile</div>
+            <div class="game-card" onclick="openGame('Free Fire')">🔥 Free Fire</div>
+            <div class="game-card" onclick="openGame('Standoff 2')">⚡ Standoff 2</div>
+            <div class="game-card" onclick="openGame('Mobile Legends')">🛡 Mobile Legends</div>
+            <div class="game-card" onclick="openGame('Telegram Services')">⭐ TG Premium & Stars</div>
+        </div>
+
+        <div id="itemListSection" style="display: none; margin-top: 15px;">
+            <button onclick="backToGames()" style="margin-bottom: 10px;">🔙 Orqaga</button>
+            <h4 id="selectedGameName"></h4>
+            <div id="itemsContainer"></div>
+
+            <div id="checkoutBox" style="display:none; margin-top: 15px;">
+                <label id="lblId">O'yin ID raqamini kiriting:</label>
+                <input type="text" id="playerIdInput" placeholder="Masalan: 512345678" oninput="checkNickname()">
+                <div id="nickResult" class="nick-box"></div>
+                <button class="btn-main" onclick="sendOrder()" id="btnBuy">Sotib olish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. BALANS TO'LDIRISH TAB -->
+    <div id="tab-topup" class="tab-content">
+        <h4>💳 Hisob to'ldirish</h4>
+        <p>To'lovni quyidagi karta raqamiga amalga oshiring va ma'lumotlarni adminga yuboring:</p>
+        <div style="background: var(--card-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+            💳 Karta: <b>9860 2601 1543 5265</b><br>
+            👤 Egasi: <b>Sh.A</b>
+        </div>
+    </div>
+
+    <!-- 3. PROFILIM TAB -->
+    <div id="tab-profile" class="tab-content">
+        <h4>👤 Profilim</h4>
+        <p>🆔 Telegram ID: <b id="userId">Yuklanmoqda...</b></p>
+        <p>👤 Ism: <b id="userName">...</b></p>
+    </div>
+
+    <!-- PASTKI NAVIGATSIYA PANELI -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home', this)">🏠 <br><span id="navHome">Bosh sahifa</span></div>
+        <div class="nav-item" onclick="switchTab('topup', this)">💳 <br><span id="navTopup">Hisob to'ldirish</span></div>
+        <div class="nav-item" onclick="switchTab('profile', this)">👤 <br><span id="navProfile">Profilim</span></div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('userId').innerText = tg.initDataUnsafe.user.id;
+            document.getElementById('userName').innerText = tg.initDataUnsafe.user.first_name;
+        }
+
+        const prices = {
+            "PUBG Mobile": [
+                {name: "60 UC", price: 13000}, {name: "325 UC", price: 65000}, {name: "660 UC", price: 125000}
+            ],
+            "Free Fire": [
+                {name: "110 Almaz", price: 12000}, {name: "341 Almaz", price: 35000}, {name: "1166 Almaz", price: 115000}
+            ],
+            "Standoff 2": [
+                {name: "100 Gold", price: 20000}, {name: "500 Gold", price: 92000}
+            ],
+            "Mobile Legends": [
+                {name: "88 Olmos", price: 25000}, {name: "257 Olmos", price: 70000}
+            ],
+            "Telegram Services": [
+                {name: "1 Oy TG Premium", price: 45000}, {name: "100 Stars", price: 29000}
+            ]
+        };
+
+        let currentSelectedGame = "";
+        let currentSelectedItem = null;
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+        }
+
+        function switchTab(tabName, el) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            el.classList.add('active');
+        }
+
+        function openGame(game) {
+            currentSelectedGame = game;
+            document.getElementById('gameList').style.display = 'none';
+            document.getElementById('itemListSection').style.display = 'block';
+            document.getElementById('selectedGameName').innerText = game;
+
+            let container = document.getElementById('itemsContainer');
+            container.innerHTML = "";
+
+            prices[game].forEach(item => {
+                let div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `<span>${item.name}</span> <b>${item.price.toLocaleString()} so'm</b>`;
+                div.onclick = () => selectItem(item);
+                container.appendChild(div);
+            });
+        }
+
+        function backToGames() {
+            document.getElementById('itemListSection').style.display = 'none';
+            document.getElementById('gameList').style.display = 'grid';
+            document.getElementById('checkoutBox').style.display = 'none';
+        }
+
+        function selectItem(item) {
+            currentSelectedItem = item;
+            document.getElementById('checkoutBox').style.display = 'block';
+        }
+
+        function checkNickname() {
+            let id = document.getElementById('playerIdInput').value;
+            let resBox = document.getElementById('nickResult');
+            if (id.length >= 6) {
+                resBox.style.display = 'block';
+                resBox.innerText = `🔍 Tekshirildi! O'yinchi Niki: Player_${id.slice(-4)}`;
+            } else {
+                resBox.style.display = 'none';
+            }
+        }
+
+        function sendOrder() {
+            let id = document.getElementById('playerIdInput').value;
+            if (!id) {
+                alert("Iltimos, ID raqamingizni kiriting!");
+                return;
+            }
+
+            let data = {
+                game: currentSelectedGame,
+                item: currentSelectedItem.name,
+                price: currentSelectedItem.price,
+                player_id: id
+            };
+
+            tg.sendData(JSON.stringify(data));
+        }
+    </script>
+</body>
+</html>
