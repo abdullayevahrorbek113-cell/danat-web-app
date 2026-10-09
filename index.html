@@ -14,32 +14,36 @@
             --border-color: #334155;
             --subtext-color: #94a3b8;
         }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
-            padding: 15px;
+            padding: 12px;
             padding-bottom: 80px;
         }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
             background: var(--card-bg);
             padding: 10px 15px;
             border-radius: 12px;
             border: 1px solid var(--border-color);
+            margin-bottom: 12px;
         }
+
         .user-profile {
             display: flex;
             align-items: center;
             gap: 10px;
         }
+
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             background: var(--accent-color);
             display: flex;
@@ -48,62 +52,63 @@
             font-weight: bold;
             overflow: hidden;
         }
+
         .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
         .guarantee-banner {
             background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 13px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 12px;
             margin-bottom: 15px;
+            line-height: 1.4;
         }
+
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        
-        .game-scroll {
-            display: flex;
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 10px;
         }
-        .game-item {
+
+        .game-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 10px;
-            min-width: 80px;
+            padding: 12px;
             text-align: center;
-            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
+            font-size: 13px;
         }
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-top: 10px;
-        }
-        .market-card {
+
+        .item-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
         }
-        .market-card img { width: 100%; height: 100px; object-fit: cover; }
-        .market-card-body { padding: 10px; }
-        .market-title { font-size: 13px; font-weight: bold; margin-bottom: 5px; }
-        .market-price { color: #10b981; font-weight: bold; font-size: 14px; }
 
         .btn-action {
             width: 100%;
             background: var(--accent-color);
             color: white;
             border: none;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 8px;
+            margin-top: 10px;
+            font-size: 14px;
         }
+
         input, select, textarea {
             width: 100%;
             padding: 10px;
@@ -114,23 +119,28 @@
             box-sizing: border-box;
             margin-top: 5px;
             margin-bottom: 10px;
+            font-size: 14px;
         }
+
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; width: 100%;
             background: var(--card-bg);
             display: flex;
             justify-content: space-around;
-            padding: 8px 0;
+            padding: 10px 0;
             border-top: 1px solid var(--border-color);
         }
+
         .nav-btn {
             text-align: center;
             font-size: 11px;
             color: var(--subtext-color);
             cursor: pointer;
         }
+
         .nav-btn.active { color: var(--accent-color); font-weight: bold; }
+
         .nick-box {
             background: rgba(16, 185, 129, 0.15);
             color: #10b981;
@@ -144,7 +154,7 @@
 </head>
 <body>
 
-    <!-- BOSH QISM / PROFIL INTEGRATSIYASI -->
+    <!-- TELEGRAM PROFIL INTEGRATSIYASI -->
     <div class="header">
         <div class="user-profile">
             <div class="user-avatar" id="userAvatar">U</div>
@@ -153,84 +163,67 @@
                 <div style="font-size: 11px; color: var(--subtext-color);">ID: <span id="userId">00000</span></div>
             </div>
         </div>
-        <div style="text-align: right;">
-            <div style="font-size: 11px; color: var(--subtext-color);">Balans</div>
-            <div style="font-weight: bold; color: #10b981;" id="userBalance">0 so'm</div>
-        </div>
     </div>
 
     <div class="guarantee-banner">
-        🛡️ **Har bir bitim kafolatda!**<br>
-        Pul sotuvchiga faqat siz akkauntni tekshirib tasdiqlaganingizdan keyin o'tadi[span_1](start_span)[span_1](end_span).
+        🛡️ <b>Har bir bitim kafolatda!</b><br>
+        Pul sotuvchiga siz xaridni tasdiqlaganingizdan so'ng o'tadi[span_0](start_span)[span_0](end_span).
     </div>
 
-    <!-- 1. MARKET VA DONAT TAB -->
+    <!-- 1. BOSH SAHIFA / O'YINLAR TABI -->
     <div id="tab-home" class="tab-content active">
-        <h4>🎮 Mashhur O'yinlar</h4>
-        <div class="game-scroll">
-            <div class="game-item" onclick="showDonatModal('PUBG Mobile')">🎯 PUBG</div>
-            <div class="game-item" onclick="showDonatModal('Free Fire')">🔥 Free Fire</div>
-            <div class="game-item" onclick="showDonatModal('Standoff 2')">⚡ Standoff 2</div>
-            <div class="game-item" onclick="showDonatModal('Brawl Stars')">💀 Brawl Stars</div>
+        <h4>🎮 Bo'limni tanlang</h4>
+        <div class="game-grid" id="mainGames">
+            <div class="game-card" onclick="openGame('PUBG Mobile')">🎯 PUBG Mobile</div>
+            <div class="game-card" onclick="openGame('Free Fire')">🔥 Free Fire</div>
+            <div class="game-card" onclick="openGame('Standoff 2')">⚡ Standoff 2</div>
+            <div class="game-card" onclick="openGame('Mobile Legends')">🛡 Mobile Legends</div>
+            <div class="game-card" onclick="openGame('Telegram Services')">⭐ TG Premium & Stars</div>
         </div>
 
-        <h4 style="margin-top: 20px;">🔥 Yangi E'lonlar (Akkauntlar)</h4>
-        <div class="grid-cards" id="marketCards">
-            <!-- Akkaunt kartalari shu yerga yuklanadi -->
-            <div class="market-card">
-                <img src="https://via.placeholder.com/150" alt="acc">
-                <div class="market-card-body">
-                    <div class="market-title">PUBG Mobile VIP Acc</div>
-                    <div class="market-price">120,000 so'm</div>
-                    <button class="btn-action" onclick="buyAccount('PUBG Mobile VIP Acc', 120000)">Sotib olish</button>
-                </div>
+        <div id="itemsSection" style="display: none; margin-top: 15px;">
+            <button onclick="backToGames()" style="background:var(--card-bg); color:white; border:1px solid var(--border-color); padding:6px 12px; border-radius:6px; cursor:pointer;">🔙 Orqaga</button>
+            <h4 id="selectedGameTitle"></h4>
+            <div id="itemsContainer"></div>
+
+            <div id="orderForm" style="display:none; margin-top: 15px;">
+                <label>ID raqami yoki Username kiriting:</label>
+                <input type="text" id="playerIdInput" placeholder="Masalan: 512345678" oninput="checkNickname()">
+                <div id="nickResult" class="nick-box"></div>
+                <button class="btn-action" onclick="submitOrder()">Sotib olish</button>
             </div>
         </div>
     </div>
 
-    <!-- 2. DONAT QILISH MODAL/PANEL -->
-    <div id="tab-donat" class="tab-content">
-        <h4 id="donatGameTitle">🎮 Donat qilish</h4>
-        <label>O'yin ID raqamini kiriting:</label>
-        <input type="text" id="gameIdInput" placeholder="Masalan: 51234567" oninput="searchGameNick()">
-        <div id="nickResult" class="nick-box"></div>
-
-        <label>Paketni tanlang:</label>
-        <select id="packageSelect"></select>
-
-        <button class="btn-action" onclick="submitDonatOrder()">Donatni Tasdiqlash</button>
-    </div>
-
-    <!-- 3. E'LON BERISH (3 marta bepul limit) -->
+    <!-- 2. E'LON BERISH TABI -->
     <div id="tab-post" class="tab-content">
-        <h4>📢 Akkaunt E'loni Berish</h4>
+        <h4>📢 Akkaunt E'lonini Joylash</h4>
         <div style="font-size: 12px; color: #f59e0b; margin-bottom: 10px;">
-            ℹ️ Bepul e'lonlar limiti: <b id="freeLimit">3</b> ta qoldi. (Keyin 2,000 so'm/e'lon)
+            ℹ️ Bepul e'lonlar limiti: <b id="freeLimit">3</b> ta. (Keyingisi: 2,000 so'm)
         </div>
-        <label>O'yinni tanlang:</label>
+        <label>O'yin nomi:</label>
         <select id="postGameSelect">
             <option>PUBG Mobile</option>
             <option>Free Fire</option>
             <option>Standoff 2</option>
+            <option>Mobile Legends</option>
         </select>
-        <label>E'lon Sarlavhasi:</label>
-        <input type="text" id="postTitle" placeholder="Masalan: 65 Level Z'or Acc">
-        <label>Rasm URL (havolasi):</label>
-        <input type="text" id="postImg" placeholder="https://...">
+        <label>E'lon sarlavhasi:</label>
+        <input type="text" id="postTitle" placeholder="Masalan: 65-Level zo'r acc">
         <label>Narxi (so'mda):</label>
         <input type="number" id="postPrice" placeholder="50000">
-        <button class="btn-action" onclick="createListing()">E'lonni Joylash</button>
+        <button class="btn-action" onclick="submitPost()">E'lonni e'lon qilish</button>
     </div>
 
-    <!-- 4. YORDAM VA QO'LLAB-QUVVATLASH -->
+    <!-- 3. YORDAM TABI -->
     <div id="tab-support" class="tab-content">
-        <h4>🎧 Qo'llab-quvvatlash Tizimi</h4>
-        <p>Savollaringiz bo'lsa xabar qoldiring:</p>
-        <textarea id="supportMsg" rows="4" placeholder="Muammoni batafsil yozing..."></textarea>
+        <h4>🎧 Qo'llab-quvvatlash xizmati</h4>
+        <p style="font-size: 13px; color: var(--subtext-color);">Savol yoki muammo bo'lsa xabar yuboring:</p>
+        <textarea id="supportText" rows="4" placeholder="Xabaringizni yozing..."></textarea>
         <button class="btn-action" onclick="sendSupport()">Yuborish</button>
     </div>
 
-    <!-- PASTKI NAVIGATSIYA -->
+    <!-- PASTKI MENYU -->
     <div class="bottom-nav">
         <div class="nav-btn active" onclick="switchTab('home', this)">🏠<br>Bosh sahifa</div>
         <div class="nav-btn" onclick="switchTab('post', this)">➕<br>E'lon berish</div>
@@ -241,21 +234,28 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        let freePosts = 3;
+        let freeCount = 3;
+        let selectedGame = "";
+        let selectedItem = null;
 
+        // User ma'lumotlarini yuklash
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             let u = tg.initDataUnsafe.user;
             document.getElementById('userId').innerText = u.id;
             document.getElementById('userName').innerText = u.first_name;
             if (u.photo_url) {
                 document.getElementById('userAvatar').innerHTML = `<img src="${u.photo_url}">`;
+            } else {
+                document.getElementById('userAvatar').innerText = u.first_name.charAt(0);
             }
         }
 
-        const packages = {
-            "PUBG Mobile": ["60 UC - 13,000 so'm", "325 UC - 65,000 so'm", "660 UC - 125,000 so'm"],
-            "Free Fire": ["110 Almaz - 12,000 so'm", "341 Almaz - 35,000 so'm"],
-            "Standoff 2": ["100 Gold - 20,000 so'm", "500 Gold - 92,000 so'm"]
+        const prices = {
+            "PUBG Mobile": [{name: "60 UC", price: 13000}, {name: "325 UC", price: 65000}, {name: "660 UC", price: 125000}],
+            "Free Fire": [{name: "110 Almaz", price: 12000}, {name: "341 Almaz", price: 35000}, {name: "1166 Almaz", price: 115000}],
+            "Standoff 2": [{name: "100 Gold", price: 20000}, {name: "500 Gold", price: 92000}],
+            "Mobile Legends": [{name: "88 Olmos", price: 25000}, {name: "257 Olmos", price: 70000}],
+            "Telegram Services": [{name: "1 Oy Premium", price: 45000}, {name: "100 Stars", price: 29000}]
         };
 
         function switchTab(tabId, el) {
@@ -265,57 +265,91 @@
             el.classList.add('active');
         }
 
-        function showDonatModal(game) {
-            document.getElementById('donatGameTitle').innerText = game + " Donat";
-            let select = document.getElementById('packageSelect');
-            select.innerHTML = "";
-            (packages[game] || []).forEach(p => {
-                let opt = document.createElement('option');
-                opt.innerText = p;
-                select.appendChild(opt);
+        function openGame(game) {
+            selectedGame = game;
+            document.getElementById('mainGames').style.display = 'none';
+            document.getElementById('itemsSection').style.display = 'block';
+            document.getElementById('selectedGameTitle').innerText = game;
+
+            let container = document.getElementById('itemsContainer');
+            container.innerHTML = "";
+
+            prices[game].forEach(item => {
+                let div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `<span>${item.name}</span> <b>${item.price.toLocaleString()} so'm</b>`;
+                div.onclick = () => selectItem(item);
+                container.appendChild(div);
             });
-            switchTab('donat', document.querySelectorAll('.nav-btn')[0]);
         }
 
-        function searchGameNick() {
-            let id = document.getElementById('gameIdInput').value;
+        function backToGames() {
+            document.getElementById('itemsSection').style.display = 'none';
+            document.getElementById('mainGames').style.display = 'grid';
+            document.getElementById('orderForm').style.display = 'none';
+        }
+
+        function selectItem(item) {
+            selectedItem = item;
+            document.getElementById('orderForm').style.display = 'block';
+        }
+
+        function checkNickname() {
+            let id = document.getElementById('playerIdInput').value;
             let nickBox = document.getElementById('nickResult');
             if (id.length >= 6) {
                 nickBox.style.display = 'block';
-                nickBox.innerText = "🔍 Qidirilmoqda... Niki: Pro_Player_" + id.slice(-3);
+                nickBox.innerText = "🔍 Tekshirildi! O'yinchi Niki: Player_" + id.slice(-4);
             } else {
                 nickBox.style.display = 'none';
             }
         }
 
-        function buyAccount(title, price) {
-            if (confirm(`Ushbu akkauntni (${title}) ${price.toLocaleString()} so'mga sotib olishga ishonchingiz komilmi?`)) {
-                tg.sendData(JSON.stringify({ type: 'buy_acc', title: title, price: price }));
+        function submitOrder() {
+            let pId = document.getElementById('playerIdInput').value;
+            if (!pId) return alert("Iltimos, ID raqamni kiriting!");
+
+            if (confirm(`${selectedItem.name} xarid qilishga ishonchingiz komilmi?`)) {
+                tg.sendData(JSON.stringify({
+                    type: 'buy',
+                    game: selectedGame,
+                    item: selectedItem.name,
+                    price: selectedItem.price,
+                    player_id: pId
+                }));
             }
         }
 
-        function createListing() {
+        function submitPost() {
             let title = document.getElementById('postTitle').value;
             let price = document.getElementById('postPrice').value;
 
-            if (freePosts <= 0) {
-                if (!confirm("Bepul e'lonlar tugadi. E'lon berish narxi 2,000 so'm. Davom etasizmi?")) return;
+            if (!title || !price) return alert("Iltimos, barcha maydonlarni to'ldiring!");
+
+            if (freeCount <= 0) {
+                if (!confirm("Bepul limit tugagan. E'lon berish 2,000 so'm. Davom etasizmi?")) return;
+            } else {
+                freeCount--;
+                document.getElementById('freeLimit').innerText = freeCount;
             }
 
-            if (title && price) {
-                if (freePosts > 0) freePosts--;
-                document.getElementById('freeLimit').innerText = freePosts;
-                tg.sendData(JSON.stringify({ type: 'new_post', title: title, price: price }));
-                alert("E'loningiz muvaffaqiyatli joylandi!");
-            }
+            tg.sendData(JSON.stringify({
+                type: 'post',
+                title: title,
+                price: price
+            }));
+            alert("E'loningiz yuborildi!");
         }
 
         function sendSupport() {
-            let msg = document.getElementById('supportMsg').value;
-            if (msg) {
-                tg.sendData(JSON.stringify({ type: 'support', msg: msg }));
-                alert("Xabaringiz qo'llab-quvvatlash xizmatiga yuborildi!");
-            }
+            let text = document.getElementById('supportText').value;
+            if (!text) return alert("Matn kiriting!");
+
+            tg.sendData(JSON.stringify({
+                type: 'support',
+                msg: text
+            }));
+            alert("Xabaringiz yuborildi!");
         }
     </script>
 </body>
