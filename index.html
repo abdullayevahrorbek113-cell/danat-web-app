@@ -13,7 +13,6 @@
             --accent-color: #2481cc;
             --border-color: #e0e0e0;
         }
-
         body.dark {
             --bg-color: #151e27;
             --card-bg: #1f2c3a;
@@ -21,24 +20,20 @@
             --accent-color: #5288c1;
             --border-color: #2b394a;
         }
-
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 15px;
-            padding-bottom: 70px;
-            transition: all 0.3s ease;
+            padding-bottom: 75px;
         }
-
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
-
         .controls select, .controls button {
             padding: 6px 10px;
             border-radius: 8px;
@@ -46,16 +41,13 @@
             background: var(--card-bg);
             color: var(--text-color);
         }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
         .game-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 12px;
         }
-
         .game-card {
             background-color: var(--card-bg);
             border-radius: 12px;
@@ -66,7 +58,6 @@
             font-weight: bold;
             border: 1px solid var(--border-color);
         }
-
         .item-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -78,9 +69,6 @@
             align-items: center;
             cursor: pointer;
         }
-
-        .item-card:hover { border-color: var(--accent-color); }
-
         .btn-main {
             width: 100%;
             background-color: var(--accent-color);
@@ -93,7 +81,6 @@
             margin-top: 10px;
             cursor: pointer;
         }
-
         input {
             width: 100%;
             padding: 10px;
@@ -104,8 +91,6 @@
             box-sizing: border-box;
             margin-top: 5px;
         }
-
-        /* Pastki doimiy menyu (Navbar) */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -117,20 +102,16 @@
             padding: 10px 0;
             border-top: 1px solid var(--border-color);
         }
-
         .nav-item {
             text-align: center;
             font-size: 12px;
             color: var(--text-color);
             cursor: pointer;
-            text-decoration: none;
         }
-
         .nav-item.active {
             color: var(--accent-color);
             font-weight: bold;
         }
-
         .nick-box {
             background: rgba(36, 129, 204, 0.1);
             color: var(--accent-color);
@@ -145,9 +126,9 @@
 <body>
 
     <div class="header">
-        <h3 id="appTitle">🎮 Danat App</h3>
+        <h3>🎮 Danat App</h3>
         <div class="controls">
-            <select id="langSelect" onchange="changeLang(this.value)">
+            <select id="langSelect">
                 <option value="uz">UZB</option>
                 <option value="en">ENG</option>
                 <option value="ru">RUS</option>
@@ -156,7 +137,7 @@
         </div>
     </div>
 
-    <!-- 1. BOSH SAHIFA TAB -->
+    <!-- 1. BOSH SAHIFA -->
     <div id="tab-home" class="tab-content active">
         <div id="gameList" class="game-grid">
             <div class="game-card" onclick="openGame('PUBG Mobile')">🎯 PUBG Mobile</div>
@@ -164,44 +145,43 @@
             <div class="game-card" onclick="openGame('Standoff 2')">⚡ Standoff 2</div>
             <div class="game-card" onclick="openGame('Mobile Legends')">🛡 Mobile Legends</div>
             <div class="game-card" onclick="openGame('Telegram Services')">⭐ TG Premium & Stars</div>
+            <div class="game-card" onclick="openGame('Acc Savdosi')">🛒 Akkauntlar Savdosi</div>
         </div>
 
         <div id="itemListSection" style="display: none; margin-top: 15px;">
-            <button onclick="backToGames()" style="margin-bottom: 10px;">🔙 Orqaga</button>
+            <button onclick="backToGames()">🔙 Orqaga</button>
             <h4 id="selectedGameName"></h4>
             <div id="itemsContainer"></div>
 
             <div id="checkoutBox" style="display:none; margin-top: 15px;">
-                <label id="lblId">O'yin ID raqamini kiriting:</label>
+                <label>ID raqami yoki Telegram Username:</label>
                 <input type="text" id="playerIdInput" placeholder="Masalan: 512345678" oninput="checkNickname()">
                 <div id="nickResult" class="nick-box"></div>
-                <button class="btn-main" onclick="sendOrder()" id="btnBuy">Sotib olish</button>
+                <button class="btn-main" onclick="sendOrder()">Sotib olish</button>
             </div>
         </div>
     </div>
 
-    <!-- 2. BALANS TO'LDIRISH TAB -->
+    <!-- 2. HISOB TO'LDIRISH -->
     <div id="tab-topup" class="tab-content">
         <h4>💳 Hisob to'ldirish</h4>
-        <p>To'lovni quyidagi karta raqamiga amalga oshiring va ma'lumotlarni adminga yuboring:</p>
-        <div style="background: var(--card-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
-            💳 Karta: <b>9860 2601 1543 5265</b><br>
-            👤 Egasi: <b>Sh.A</b>
-        </div>
+        <p>To'lov summasini kiriting va bot orqali chek yuboring:</p>
+        <input type="number" id="topupAmount" placeholder="Summa (masalan: 50000)">
+        <button class="btn-main" onclick="requestTopup()">Chek Yuborishga O'tish</button>
     </div>
 
-    <!-- 3. PROFILIM TAB -->
+    <!-- 3. PROFILIM -->
     <div id="tab-profile" class="tab-content">
         <h4>👤 Profilim</h4>
-        <p>🆔 Telegram ID: <b id="userId">Yuklanmoqda...</b></p>
+        <p>🆔 Telegram ID: <b id="userId">...</b></p>
         <p>👤 Ism: <b id="userName">...</b></p>
     </div>
 
-    <!-- PASTKI NAVIGATSIYA PANELI -->
+    <!-- PASTKI MENYU -->
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('home', this)">🏠 <br><span id="navHome">Bosh sahifa</span></div>
-        <div class="nav-item" onclick="switchTab('topup', this)">💳 <br><span id="navTopup">Hisob to'ldirish</span></div>
-        <div class="nav-item" onclick="switchTab('profile', this)">👤 <br><span id="navProfile">Profilim</span></div>
+        <div class="nav-item active" onclick="switchTab('home', this)">🏠<br>Bosh sahifa</div>
+        <div class="nav-item" onclick="switchTab('topup', this)">💳<br>Hisob to'ldirish</div>
+        <div class="nav-item" onclick="switchTab('profile', this)">👤<br>Profilim</div>
     </div>
 
     <script>
@@ -214,29 +194,17 @@
         }
 
         const prices = {
-            "PUBG Mobile": [
-                {name: "60 UC", price: 13000}, {name: "325 UC", price: 65000}, {name: "660 UC", price: 125000}
-            ],
-            "Free Fire": [
-                {name: "110 Almaz", price: 12000}, {name: "341 Almaz", price: 35000}, {name: "1166 Almaz", price: 115000}
-            ],
-            "Standoff 2": [
-                {name: "100 Gold", price: 20000}, {name: "500 Gold", price: 92000}
-            ],
-            "Mobile Legends": [
-                {name: "88 Olmos", price: 25000}, {name: "257 Olmos", price: 70000}
-            ],
-            "Telegram Services": [
-                {name: "1 Oy TG Premium", price: 45000}, {name: "100 Stars", price: 29000}
-            ]
+            "PUBG Mobile": [{name: "60 UC", price: 13000}, {name: "325 UC", price: 65000}, {name: "660 UC", price: 125000}],
+            "Free Fire": [{name: "110 Almaz", price: 12000}, {name: "341 Almaz", price: 35000}, {name: "1166 Almaz", price: 115000}],
+            "Standoff 2": [{name: "100 Gold", price: 20000}, {name: "500 Gold", price: 92000}],
+            "Mobile Legends": [{name: "88 Olmos", price: 25000}, {name: "257 Olmos", price: 70000}],
+            "Telegram Services": [{name: "1 Oy Premium", price: 45000}, {name: "100 Stars", price: 29000}],
+            "Acc Savdosi": [{name: "PUBG VIP Acc #1", price: 350000}, {name: "Free Fire Level 65 Acc", price: 200000}]
         };
 
-        let currentSelectedGame = "";
-        let currentSelectedItem = null;
+        let currentGame = "", currentItem = null;
 
-        function toggleTheme() {
-            document.body.classList.toggle('dark');
-        }
+        function toggleTheme() { document.body.classList.toggle('dark'); }
 
         function switchTab(tabName, el) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -246,7 +214,7 @@
         }
 
         function openGame(game) {
-            currentSelectedGame = game;
+            currentGame = game;
             document.getElementById('gameList').style.display = 'none';
             document.getElementById('itemListSection').style.display = 'block';
             document.getElementById('selectedGameName').innerText = game;
@@ -258,7 +226,7 @@
                 let div = document.createElement('div');
                 div.className = 'item-card';
                 div.innerHTML = `<span>${item.name}</span> <b>${item.price.toLocaleString()} so'm</b>`;
-                div.onclick = () => selectItem(item);
+                div.onclick = () => { currentItem = item; document.getElementById('checkoutBox').style.display = 'block'; };
                 container.appendChild(div);
             });
         }
@@ -269,37 +237,25 @@
             document.getElementById('checkoutBox').style.display = 'none';
         }
 
-        function selectItem(item) {
-            currentSelectedItem = item;
-            document.getElementById('checkoutBox').style.display = 'block';
-        }
-
         function checkNickname() {
             let id = document.getElementById('playerIdInput').value;
-            let resBox = document.getElementById('nickResult');
+            let res = document.getElementById('nickResult');
             if (id.length >= 6) {
-                resBox.style.display = 'block';
-                resBox.innerText = `🔍 Tekshirildi! O'yinchi Niki: Player_${id.slice(-4)}`;
-            } else {
-                resBox.style.display = 'none';
-            }
+                res.style.display = 'block';
+                res.innerText = `✅ Tekshirildi! O'yinchi Niki: Player_${id.slice(-4)}`;
+            } else { res.style.display = 'none'; }
         }
 
         function sendOrder() {
             let id = document.getElementById('playerIdInput').value;
-            if (!id) {
-                alert("Iltimos, ID raqamingizni kiriting!");
-                return;
-            }
+            if(!id) return alert("ID kiritilmadi!");
+            tg.sendData(JSON.stringify({ type: 'buy', game: currentGame, item: currentItem.name, price: currentItem.price, player_id: id }));
+        }
 
-            let data = {
-                game: currentSelectedGame,
-                item: currentSelectedItem.name,
-                price: currentSelectedItem.price,
-                player_id: id
-            };
-
-            tg.sendData(JSON.stringify(data));
+        function requestTopup() {
+            let amt = document.getElementById('topupAmount').value;
+            if(!amt || amt <= 0) return alert("Summani kiriting!");
+            tg.sendData(JSON.stringify({ type: 'topup', amount: amt }));
         }
     </script>
 </body>
