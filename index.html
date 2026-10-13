@@ -3,353 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danat & Market App</title>
+    <title>Do'kon va Hisob</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --accent-color: #6366f1;
-            --border-color: #334155;
-            --subtext-color: #94a3b8;
-        }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
             margin: 0;
-            padding: 12px;
-            padding-bottom: 80px;
-        }
-
-        .header {
+            padding: 20px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            background: var(--card-bg);
-            padding: 10px 15px;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 { text-align: center; margin-bottom: 5px; }
+        .card {
+            background-color: var(--tg-theme-secondary-bg-color, #f1f1f1);
             border-radius: 12px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 12px;
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            overflow: hidden;
-        }
-
-        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
-        .guarantee-banner {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            padding: 10px 12px;
-            border-radius: 10px;
-            font-size: 12px;
+            padding: 15px;
             margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .game-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 10px;
-        }
-
-        .game-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-            font-weight: bold;
             cursor: pointer;
-            font-size: 13px;
+            border: 2px solid transparent;
+            transition: 0.2s;
         }
-
-        .item-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .btn-action {
-            width: 100%;
-            background: var(--accent-color);
-            color: white;
+        .card.selected { border-color: var(--tg-theme-button-color, #2481cc); }
+        .card h3 { margin: 0 0 5px 0; font-size: 16px; }
+        .card p { margin: 0; font-size: 14px; color: var(--tg-theme-hint-color, #707579); }
+        .btn {
+            background-color: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
             border: none;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
             font-weight: bold;
+            border-radius: 10px;
             cursor: pointer;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        input, select, textarea {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: white;
-            box-sizing: border-box;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .nav-btn {
+            margin-top: 10px;
             text-align: center;
-            font-size: 11px;
-            color: var(--subtext-color);
-            cursor: pointer;
-        }
-
-        .nav-btn.active { color: var(--accent-color); font-weight: bold; }
-
-        .nick-box {
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 13px;
-            display: none;
-            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
-    <!-- TELEGRAM PROFIL INTEGRATSIYASI -->
-    <div class="header">
-        <div class="user-profile">
-            <div class="user-avatar" id="userAvatar">U</div>
-            <div>
-                <div id="userName" style="font-weight: bold; font-size: 14px;">Foydalanuvchi</div>
-                <div style="font-size: 11px; color: var(--subtext-color);">ID: <span id="userId">00000</span></div>
+    <div class="container">
+        <h2>🛍 Raqamli Mahsulotlar</h2>
+        <p style="text-align:center; color:gray; font-size:14px;">Mahsulotni tanlang va avtomatik xarid qiling</p>
+
+        <div id="product-list">
+            <div class="card selected" onclick="selectProduct('ebook', this)">
+                <h3>📚 Elektron Kitob (PDF)</h3>
+                <p>Narxi: 50 Stars</p>
+            </div>
+            <div class="card" onclick="selectProduct('video', this)">
+                <h3>🎬 Premium Video Kurs</h3>
+                <p>Narxi: 150 Stars</p>
             </div>
         </div>
-    </div>
 
-    <div class="guarantee-banner">
-        🛡️ <b>Har bir bitim kafolatda!</b><br>
-        Pul sotuvchiga siz xaridni tasdiqlaganingizdan so'ng o'tadi[span_0](start_span)[span_0](end_span).
-    </div>
-
-    <!-- 1. BOSH SAHIFA / O'YINLAR TABI -->
-    <div id="tab-home" class="tab-content active">
-        <h4>🎮 Bo'limni tanlang</h4>
-        <div class="game-grid" id="mainGames">
-            <div class="game-card" onclick="openGame('PUBG Mobile')">🎯 PUBG Mobile</div>
-            <div class="game-card" onclick="openGame('Free Fire')">🔥 Free Fire</div>
-            <div class="game-card" onclick="openGame('Standoff 2')">⚡ Standoff 2</div>
-            <div class="game-card" onclick="openGame('Mobile Legends')">🛡 Mobile Legends</div>
-            <div class="game-card" onclick="openGame('Telegram Services')">⭐ TG Premium & Stars</div>
-        </div>
-
-        <div id="itemsSection" style="display: none; margin-top: 15px;">
-            <button onclick="backToGames()" style="background:var(--card-bg); color:white; border:1px solid var(--border-color); padding:6px 12px; border-radius:6px; cursor:pointer;">🔙 Orqaga</button>
-            <h4 id="selectedGameTitle"></h4>
-            <div id="itemsContainer"></div>
-
-            <div id="orderForm" style="display:none; margin-top: 15px;">
-                <label>ID raqami yoki Username kiriting:</label>
-                <input type="text" id="playerIdInput" placeholder="Masalan: 512345678" oninput="checkNickname()">
-                <div id="nickResult" class="nick-box"></div>
-                <button class="btn-action" onclick="submitOrder()">Sotib olish</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. E'LON BERISH TABI -->
-    <div id="tab-post" class="tab-content">
-        <h4>📢 Akkaunt E'lonini Joylash</h4>
-        <div style="font-size: 12px; color: #f59e0b; margin-bottom: 10px;">
-            ℹ️ Bepul e'lonlar limiti: <b id="freeLimit">3</b> ta. (Keyingisi: 2,000 so'm)
-        </div>
-        <label>O'yin nomi:</label>
-        <select id="postGameSelect">
-            <option>PUBG Mobile</option>
-            <option>Free Fire</option>
-            <option>Standoff 2</option>
-            <option>Mobile Legends</option>
-        </select>
-        <label>E'lon sarlavhasi:</label>
-        <input type="text" id="postTitle" placeholder="Masalan: 65-Level zo'r acc">
-        <label>Narxi (so'mda):</label>
-        <input type="number" id="postPrice" placeholder="50000">
-        <button class="btn-action" onclick="submitPost()">E'lonni e'lon qilish</button>
-    </div>
-
-    <!-- 3. YORDAM TABI -->
-    <div id="tab-support" class="tab-content">
-        <h4>🎧 Qo'llab-quvvatlash xizmati</h4>
-        <p style="font-size: 13px; color: var(--subtext-color);">Savol yoki muammo bo'lsa xabar yuboring:</p>
-        <textarea id="supportText" rows="4" placeholder="Xabaringizni yozing..."></textarea>
-        <button class="btn-action" onclick="sendSupport()">Yuborish</button>
-    </div>
-
-    <!-- PASTKI MENYU -->
-    <div class="bottom-nav">
-        <div class="nav-btn active" onclick="switchTab('home', this)">🏠<br>Bosh sahifa</div>
-        <div class="nav-btn" onclick="switchTab('post', this)">➕<br>E'lon berish</div>
-        <div class="nav-btn" onclick="switchTab('support', this)">🎧<br>Yordam</div>
+        <button class="btn" onclick="checkout()">Sotib olish</button>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        let freeCount = 3;
-        let selectedGame = "";
-        let selectedItem = null;
+        let selectedProduct = 'ebook';
 
-        // User ma'lumotlarini yuklash
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            let u = tg.initDataUnsafe.user;
-            document.getElementById('userId').innerText = u.id;
-            document.getElementById('userName').innerText = u.first_name;
-            if (u.photo_url) {
-                document.getElementById('userAvatar').innerHTML = `<img src="${u.photo_url}">`;
-            } else {
-                document.getElementById('userAvatar').innerText = u.first_name.charAt(0);
-            }
+        function selectProduct(productKey, element) {
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedProduct = productKey;
         }
 
-        const prices = {
-            "PUBG Mobile": [{name: "60 UC", price: 13000}, {name: "325 UC", price: 65000}, {name: "660 UC", price: 125000}],
-            "Free Fire": [{name: "110 Almaz", price: 12000}, {name: "341 Almaz", price: 35000}, {name: "1166 Almaz", price: 115000}],
-            "Standoff 2": [{name: "100 Gold", price: 20000}, {name: "500 Gold", price: 92000}],
-            "Mobile Legends": [{name: "88 Olmos", price: 25000}, {name: "257 Olmos", price: 70000}],
-            "Telegram Services": [{name: "1 Oy Premium", price: 45000}, {name: "100 Stars", price: 29000}]
-        };
-
-        function switchTab(tabId, el) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            el.classList.add('active');
-        }
-
-        function openGame(game) {
-            selectedGame = game;
-            document.getElementById('mainGames').style.display = 'none';
-            document.getElementById('itemsSection').style.display = 'block';
-            document.getElementById('selectedGameTitle').innerText = game;
-
-            let container = document.getElementById('itemsContainer');
-            container.innerHTML = "";
-
-            prices[game].forEach(item => {
-                let div = document.createElement('div');
-                div.className = 'item-card';
-                div.innerHTML = `<span>${item.name}</span> <b>${item.price.toLocaleString()} so'm</b>`;
-                div.onclick = () => selectItem(item);
-                container.appendChild(div);
-            });
-        }
-
-        function backToGames() {
-            document.getElementById('itemsSection').style.display = 'none';
-            document.getElementById('mainGames').style.display = 'grid';
-            document.getElementById('orderForm').style.display = 'none';
-        }
-
-        function selectItem(item) {
-            selectedItem = item;
-            document.getElementById('orderForm').style.display = 'block';
-        }
-
-        function checkNickname() {
-            let id = document.getElementById('playerIdInput').value;
-            let nickBox = document.getElementById('nickResult');
-            if (id.length >= 6) {
-                nickBox.style.display = 'block';
-                nickBox.innerText = "🔍 Tekshirildi! O'yinchi Niki: Player_" + id.slice(-4);
-            } else {
-                nickBox.style.display = 'none';
-            }
-        }
-
-        function submitOrder() {
-            let pId = document.getElementById('playerIdInput').value;
-            if (!pId) return alert("Iltimos, ID raqamni kiriting!");
-
-            if (confirm(`${selectedItem.name} xarid qilishga ishonchingiz komilmi?`)) {
-                tg.sendData(JSON.stringify({
-                    type: 'buy',
-                    game: selectedGame,
-                    item: selectedItem.name,
-                    price: selectedItem.price,
-                    player_id: pId
-                }));
-            }
-        }
-
-        function submitPost() {
-            let title = document.getElementById('postTitle').value;
-            let price = document.getElementById('postPrice').value;
-
-            if (!title || !price) return alert("Iltimos, barcha maydonlarni to'ldiring!");
-
-            if (freeCount <= 0) {
-                if (!confirm("Bepul limit tugagan. E'lon berish 2,000 so'm. Davom etasizmi?")) return;
-            } else {
-                freeCount--;
-                document.getElementById('freeLimit').innerText = freeCount;
-            }
-
-            tg.sendData(JSON.stringify({
-                type: 'post',
-                title: title,
-                price: price
-            }));
-            alert("E'loningiz yuborildi!");
-        }
-
-        function sendSupport() {
-            let text = document.getElementById('supportText').value;
-            if (!text) return alert("Matn kiriting!");
-
-            tg.sendData(JSON.stringify({
-                type: 'support',
-                msg: text
-            }));
-            alert("Xabaringiz yuborildi!");
+        function checkout() {
+            let data = JSON.stringify({ "product": selectedProduct });
+            tg.sendData(data);
         }
     </script>
 </body>
